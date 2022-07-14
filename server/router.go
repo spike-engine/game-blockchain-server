@@ -23,9 +23,12 @@ func NewRouter() *gin.Engine {
 			account.GET("update/password", api.UpdatePassword)
 		}
 
-		ipfs := v1.Group("/signature")
+		game := v1.Group("/game")
 		{
-			ipfs.POST("pin/file", api.SignSeparateTX)
+			game.POST("mint/erc20", api.MintERC20)
+			game.POST("mint/erc721", api.MintERC721)
+			game.POST("withdrawal/erc20", api.WithdrawalERC20)
+			game.POST("withdrawal/erc721", api.WithdrawalERC721)
 		}
 	}
 	return r

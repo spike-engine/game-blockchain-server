@@ -10,15 +10,15 @@ import (
 )
 
 type WithdrawalERC20Service struct {
-	toAddress      string
-	Amount         string
-	ContractNumber int
+	ToAddress      string `form:"to_address",json:"to_address"`
+	Amount         string `form:"amount",json:"amount"`
+	ContractNumber int    `form:"contract_number",json:"contract_number"`
 }
 
-func (service *WithdrawalERC20Service) WithdrawalSKK() serializer.Response {
+func (service *WithdrawalERC20Service) WithdrawalERC20() serializer.Response {
 	methodID := utils.GetTxMethodName("transfer(address,uint256)")
 
-	paddedAddress := utils.GetTxAddress(service.toAddress)
+	paddedAddress := utils.GetTxAddress(service.ToAddress)
 
 	paddedAmount := utils.GetTxAmount(service.Amount)
 
@@ -74,6 +74,7 @@ func (service *WithdrawalERC20Service) WithdrawalSKK() serializer.Response {
 
 	return serializer.Response{
 		Code: 200,
+		Data: signedTx.Hash(),
 	}
 
 }

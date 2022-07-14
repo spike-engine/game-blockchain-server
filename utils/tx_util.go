@@ -7,6 +7,7 @@ import (
 	"github.com/ethereum/go-ethereum/accounts/keystore"
 	"github.com/ethereum/go-ethereum/common"
 	"github.com/ethereum/go-ethereum/core/types"
+	"os"
 )
 
 type SpikeTx struct {
@@ -19,28 +20,29 @@ func (service *SpikeTx) ConstructionTransaction() (*types.Transaction, error) {
 	client, err := config.GetUsefulBscNode()
 	if err != nil {
 		return nil, err
+
 	}
 
-	//keyStore := keystore.NewKeyStore(os.Getenv("KEY_DIR"), keystore.StandardScryptN, keystore.StandardScryptP)
-	keyStore := keystore.NewKeyStore("/Users/fuyiwei/path/to/keystore", keystore.StandardScryptN, keystore.StandardScryptP)
+	keyStore := keystore.NewKeyStore(os.Getenv("KEY_DIR"), keystore.StandardScryptN, keystore.StandardScryptP)
+	//keyStore := keystore.NewKeyStore("/Users/fuyiwei/path/to/keystore", keystore.StandardScryptN, keystore.StandardScryptP)
 
 	nonce, err := client.PendingNonceAt(context.Background(), keyStore.Accounts()[0].Address)
 	if err != nil {
 		return nil, err
 	}
 
-	tokenAddress := common.HexToAddress(service.To)
+	toAddress := common.HexToAddress(service.To)
 
-	gasLimit, err := client.EstimateGas(context.Background(), ethereum.CallMsg{
-		From: keyStore.Accounts()[0].Address,
-		To:   &tokenAddress,
-		Data: service.Data,
-	})
+	gasPrice, err := client.SuggestGasPrice(context.Background())
 	if err != nil {
 		return nil, err
 	}
 
-	gasPrice, err := client.SuggestGasPrice(context.Background())
+	gasLimit, err := client.EstimateGas(context.Background(), ethereum.CallMsg{
+		From: keyStore.Accounts()[0].Address,
+		To:   &toAddress,
+		Data: service.Data,
+	})
 	if err != nil {
 		return nil, err
 	}
@@ -51,7 +53,7 @@ func (service *SpikeTx) ConstructionTransaction() (*types.Transaction, error) {
 			Gas:      gasLimit,
 			GasPrice: gasPrice,
 			Data:     service.Data,
-			To:       &tokenAddress,
+			To:       &toAddress,
 		})
 	return tx, nil
 }

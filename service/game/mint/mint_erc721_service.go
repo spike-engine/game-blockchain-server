@@ -10,13 +10,13 @@ import (
 )
 
 type MintERC721Service struct {
-	TokenID string `json:"token_id,omitempty"`
+	TokenID string `form:"token_id" , json:"token_id"`
 	//  toAddress is nft owner, Can be the owner or administrator of the contract
-	ToAddress string `json:"to_address,omitempty"`
+	ToAddress string `form:"to_address"，json:"to_address"`
 }
 
 func (service *MintERC721Service) MintSoul() serializer.Response {
-	methodID := utils.GetTxMethodName("mint(address,uint256)")
+	methodID := utils.GetTxMethodName("mint(uint256,address)")
 
 	paddedAddress := utils.GetTxAddress(service.ToAddress)
 
@@ -59,11 +59,13 @@ func (service *MintERC721Service) MintSoul() serializer.Response {
 	err = Broad.SendTransaction()
 	if err != nil {
 		return serializer.Response{
-			Code: 405,
+			Code:  405,
+			Error: err.Error(),
 		}
 	}
 
 	return serializer.Response{
 		Code: 200,
+		Data: signedTx.Hash(),
 	}
 }

@@ -10,13 +10,13 @@ import (
 )
 
 type WithdrawalERC721Service struct {
-	FromAddress string
-	ToAddress   string
-	TokenID     string
+	FromAddress string `form:"from_address",json:"from_address"`
+	ToAddress   string `form:"to_address",json:"to_address"`
+	TokenID     string `form:"token_id",json:"token_id"`
 }
 
 func (service *WithdrawalERC721Service) WithdrawalSoul() serializer.Response {
-	methodID := utils.GetTxMethodName("transfer(address,uint256)")
+	methodID := utils.GetTxMethodName("transferFrom(address,address,uint256)")
 
 	fromAddress := utils.GetTxAddress(service.FromAddress)
 
@@ -68,5 +68,6 @@ func (service *WithdrawalERC721Service) WithdrawalSoul() serializer.Response {
 
 	return serializer.Response{
 		Code: 200,
+		Data: signedTx.Hash(),
 	}
 }
