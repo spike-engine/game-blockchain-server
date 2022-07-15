@@ -10,9 +10,9 @@ import (
 )
 
 type MintERC721Service struct {
-	TokenID string `form:"token_id" , json:"token_id"`
+	TokenID string `form:"token_id",json:"token_id"`
 	//  toAddress is nft owner, Can be the owner or administrator of the contract
-	ToAddress string `form:"to_address"，json:"to_address"`
+	ToAddress string `form:"to_address",json:"to_address"`
 }
 
 func (service *MintERC721Service) MintSoul() serializer.Response {
