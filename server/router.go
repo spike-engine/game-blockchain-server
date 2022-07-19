@@ -19,8 +19,8 @@ func NewRouter() *gin.Engine {
 
 		account := v1.Group("/account")
 		{
-			account.GET("update/initpassword", api.UpdateInitialPassword)
-			account.GET("update/password", api.UpdatePassword)
+			account.POST("update/initpassword", api.UpdateInitialPassword)
+			account.POST("update/password", api.UpdatePassword)
 		}
 
 		game := v1.Group("/game")

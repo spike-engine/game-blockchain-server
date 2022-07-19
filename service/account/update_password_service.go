@@ -7,8 +7,8 @@ import (
 )
 
 type UpdatePasswordService struct {
-	OldPassWord string
-	NewPassWord string
+	OldPassWord string `form:"old_password"`
+	NewPassWord string `form:"new_password"`
 }
 
 func (service *UpdatePasswordService) UpdateInitialPassword() serializer.Response {
