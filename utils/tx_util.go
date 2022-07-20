@@ -24,7 +24,6 @@ func (service *SpikeTx) ConstructionTransaction() (*types.Transaction, error) {
 	}
 
 	keyStore := keystore.NewKeyStore(os.Getenv("KEY_DIR"), keystore.StandardScryptN, keystore.StandardScryptP)
-	//keyStore := keystore.NewKeyStore("/Users/fuyiwei/path/to/keystore", keystore.StandardScryptN, keystore.StandardScryptP)
 
 	nonce, err := client.PendingNonceAt(context.Background(), keyStore.Accounts()[0].Address)
 	if err != nil {

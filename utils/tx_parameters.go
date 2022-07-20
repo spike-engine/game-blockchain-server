@@ -17,8 +17,12 @@ func GetTxAddress(address string) []byte {
 	return common.LeftPadBytes(common.HexToAddress(address).Bytes(), 32)
 }
 
-func GetTxAmount(a string) []byte {
+func GetTxUint256(a string) []byte {
 	amount := new(big.Int)
 	amount.SetString(a, 10) // 1000 tokens
 	return common.LeftPadBytes(amount.Bytes(), 32)
+}
+
+func GetTxString(s string) []byte {
+	return common.LeftPadBytes([]byte(s), 32)
 }

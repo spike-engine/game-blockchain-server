@@ -10,9 +10,10 @@ import (
 )
 
 type WithdrawalERC721Service struct {
-	FromAddress string `form:"from_address" binding:"required"`
-	ToAddress   string `form:"to_address" binding:"required"`
-	TokenID     string `form:"token_id" binding:"required"`
+	FromAddress    string `form:"from_address" binding:"required"`
+	ToAddress      string `form:"to_address" binding:"required"`
+	TokenID        string `form:"token_id" binding:"required"`
+	ContractNumber int    `form:"contract_number" binding:"required"`
 }
 
 func (service *WithdrawalERC721Service) WithdrawalSoul() serializer.Response {
@@ -22,7 +23,7 @@ func (service *WithdrawalERC721Service) WithdrawalSoul() serializer.Response {
 
 	toAddress := utils.GetTxAddress(service.ToAddress)
 
-	paddedAmount := utils.GetTxAmount(service.TokenID)
+	paddedAmount := utils.GetTxUint256(service.TokenID)
 
 	var data []byte
 	data = append(data, methodID...)
@@ -30,9 +31,11 @@ func (service *WithdrawalERC721Service) WithdrawalSoul() serializer.Response {
 	data = append(data, toAddress...)
 	data = append(data, paddedAmount...)
 
+	contractAddress, err := constants.GetContractAddress(service.ContractNumber)
+
 	spikeTx := &utils.SpikeTx{
 		Data: data,
-		To:   constants.SOUL_CONTRACT_ADDRESS_TESTNET,
+		To:   contractAddress,
 	}
 	transaction, err := spikeTx.ConstructionTransaction()
 	if err != nil {

@@ -21,7 +21,7 @@ func (service *MintERC20Service) MintERC20() serializer.Response {
 
 	paddedAddress := utils.GetTxAddress(service.Account)
 
-	paddedAmount := utils.GetTxAmount(service.Amount)
+	paddedAmount := utils.GetTxUint256(service.Amount)
 
 	var data []byte
 	data = append(data, methodID...)

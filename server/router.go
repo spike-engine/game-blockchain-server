@@ -29,6 +29,9 @@ func NewRouter() *gin.Engine {
 			game.POST("mint/erc721", api.MintERC721)
 			game.POST("withdrawal/erc20", api.WithdrawalERC20)
 			game.POST("withdrawal/erc721", api.WithdrawalERC721)
+			game.POST("nft/baseuri", api.SetBaseTokenURI)
+			game.POST("nft/tokenuri", api.SetTokenURI)
+
 		}
 	}
 	return r

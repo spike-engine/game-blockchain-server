@@ -1,4 +1,4 @@
-package withdrawal
+package nft
 
 import (
 	"game-blockchain-server/constants"
@@ -9,32 +9,24 @@ import (
 	"os"
 )
 
-type WithdrawalERC20Service struct {
-	ToAddress      string `form:"to_address" binding:"required"`
-	Amount         string `form:"amount" binding:"required"`
+type SetTokenURI struct {
+	TokenID        string `form:"token_id" binding:"required"`
+	TokenURI       string `form:"token_uri" binding:"required"`
 	ContractNumber int    `form:"contract_number" binding:"required"`
 }
 
-func (service *WithdrawalERC20Service) WithdrawalERC20() serializer.Response {
-	methodID := utils.GetTxMethodName("transfer(address,uint256)")
+func (service *SetTokenURI) SetTokenURI() serializer.Response {
+	methodID := utils.GetTxMethodName("setTokenURl(uint256,string)")
 
-	paddedAddress := utils.GetTxAddress(service.ToAddress)
-
-	paddedAmount := utils.GetTxUint256(service.Amount)
+	tokenID := utils.GetTxUint256(service.TokenID)
+	tokenURI := utils.GetTxString(service.TokenURI)
 
 	var data []byte
 	data = append(data, methodID...)
-	data = append(data, paddedAddress...)
-	data = append(data, paddedAmount...)
+	data = append(data, tokenID...)
+	data = append(data, tokenURI...)
 
 	contractAddress, err := constants.GetContractAddress(service.ContractNumber)
-
-	if err != nil {
-		return serializer.Response{
-			Code:  401,
-			Error: err.Error(),
-		}
-	}
 
 	spikeTx := &utils.SpikeTx{
 		Data: data,
@@ -76,5 +68,4 @@ func (service *WithdrawalERC20Service) WithdrawalERC20() serializer.Response {
 		Code: 200,
 		Data: signedTx.Hash(),
 	}
-
 }
