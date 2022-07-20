@@ -1,6 +1,7 @@
 package mint
 
 import (
+	"fmt"
 	"game-blockchain-server/constants"
 	"game-blockchain-server/serializer"
 	"game-blockchain-server/service/signature"
@@ -10,9 +11,9 @@ import (
 )
 
 type MintERC721Service struct {
-	TokenID string `form:"token_id",json:"token_id"`
+	TokenID string `form:"token_id" binding:"required"`
 	//  toAddress is nft owner, Can be the owner or administrator of the contract
-	ToAddress string `form:"to_address",json:"to_address"`
+	ToAddress string `form:"to_address" binding:"required"`
 }
 
 func (service *MintERC721Service) MintSoul() serializer.Response {
@@ -26,6 +27,8 @@ func (service *MintERC721Service) MintSoul() serializer.Response {
 	data = append(data, methodID...)
 	data = append(data, paddedAmount...)
 	data = append(data, paddedAddress...)
+
+	fmt.Printf("service +%v", service)
 
 	spikeTx := &utils.SpikeTx{
 		Data: data,

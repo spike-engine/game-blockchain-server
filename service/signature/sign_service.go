@@ -5,6 +5,7 @@ import (
 	"game-blockchain-server/config"
 	"github.com/ethereum/go-ethereum/accounts/keystore"
 	"github.com/ethereum/go-ethereum/core/types"
+	"os"
 )
 
 type SignTxService struct {
@@ -13,8 +14,7 @@ type SignTxService struct {
 }
 
 func (service *SignTxService) SignSeparateTX() (*types.Transaction, error) {
-	//ks := keystore.NewKeyStore(os.Getenv("KEY_DIR"), keystore.StandardScryptN, keystore.StandardScryptP)
-	ks := keystore.NewKeyStore("/Users/fuyiwei/path/to/keystore", keystore.StandardScryptN, keystore.StandardScryptP)
+	ks := keystore.NewKeyStore(os.Getenv("KEY_DIR"), keystore.StandardScryptN, keystore.StandardScryptP)
 
 	client, err := config.GetUsefulBscNode()
 	if err != nil {

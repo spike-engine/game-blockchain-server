@@ -10,9 +10,9 @@ import (
 )
 
 type MintERC20Service struct {
-	Account        string `form:"account",json:"account"`
-	Amount         string `form:"amount",json:"amount"`
-	ContractNumber int    `form:"contract_number",json:"contract_number"`
+	Account        string `form:"account" binding:"required"`
+	Amount         string `form:"amount" binding:"required"`
+	ContractNumber int    `form:"contract_number" binding:"required"`
 }
 
 func (service *MintERC20Service) MintERC20() serializer.Response {
