@@ -6,8 +6,12 @@ import (
 	"game-blockchain-server/service/signature"
 	tx "game-blockchain-server/service/transaction"
 	"game-blockchain-server/utils"
+	"github.com/ethereum/go-ethereum/common/hexutil"
+	logger "github.com/ipfs/go-log"
 	"os"
 )
+
+var log = logger.Logger("withdrawal")
 
 type WithdrawalERC20Service struct {
 	ToAddress      string `form:"to_address" binding:"required"`
@@ -27,9 +31,12 @@ func (service *WithdrawalERC20Service) WithdrawalERC20() serializer.Response {
 	data = append(data, paddedAddress...)
 	data = append(data, paddedAmount...)
 
+	log.Info("====Spike log: ", "methodID: ", hexutil.Encode(methodID), "address: ", hexutil.Encode(paddedAddress), "amount: ", hexutil.Encode(paddedAmount))
+
 	contractAddress, err := constants.GetContractAddress(service.ContractNumber)
 
 	if err != nil {
+		log.Error("====Spike log: ", err)
 		return serializer.Response{
 			Code:  401,
 			Error: err.Error(),
@@ -42,6 +49,7 @@ func (service *WithdrawalERC20Service) WithdrawalERC20() serializer.Response {
 	}
 	transaction, err := spikeTx.ConstructionTransaction()
 	if err != nil {
+		log.Error("====Spike log: ", err)
 		return serializer.Response{
 			Code:  402,
 			Error: err.Error(),
@@ -55,6 +63,7 @@ func (service *WithdrawalERC20Service) WithdrawalERC20() serializer.Response {
 
 	signedTx, err := SignTxService.SignSeparateTX()
 	if err != nil {
+		log.Error("====Spike log: ", err)
 		return serializer.Response{
 			Code:  403,
 			Error: err.Error(),
@@ -67,8 +76,10 @@ func (service *WithdrawalERC20Service) WithdrawalERC20() serializer.Response {
 
 	err = Broad.SendTransaction()
 	if err != nil {
+		log.Error("====Spike log: ", err)
 		return serializer.Response{
-			Code: 405,
+			Code:  405,
+			Error: err.Error(),
 		}
 	}
 

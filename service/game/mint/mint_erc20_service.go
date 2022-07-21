@@ -6,8 +6,11 @@ import (
 	"game-blockchain-server/service/signature"
 	tx "game-blockchain-server/service/transaction"
 	"game-blockchain-server/utils"
+	logger "github.com/ipfs/go-log"
 	"os"
 )
+
+var log = logger.Logger("mint")
 
 type MintERC20Service struct {
 	Account        string `form:"account" binding:"required"`
@@ -31,6 +34,7 @@ func (service *MintERC20Service) MintERC20() serializer.Response {
 	contractAddress, err := constants.GetContractAddress(service.ContractNumber)
 
 	if err != nil {
+		log.Error("====Spike log: ", err)
 		return serializer.Response{
 			Code:  401,
 			Error: err.Error(),
@@ -43,6 +47,7 @@ func (service *MintERC20Service) MintERC20() serializer.Response {
 	}
 	transaction, err := spikeTx.ConstructionTransaction()
 	if err != nil {
+		log.Error("====Spike log: ", err)
 		return serializer.Response{
 			Code:  402,
 			Error: err.Error(),
@@ -56,6 +61,7 @@ func (service *MintERC20Service) MintERC20() serializer.Response {
 
 	signedTx, err := SignTxService.SignSeparateTX()
 	if err != nil {
+		log.Error("====Spike log: ", err)
 		return serializer.Response{
 			Code:  403,
 			Error: err.Error(),
@@ -68,6 +74,7 @@ func (service *MintERC20Service) MintERC20() serializer.Response {
 
 	err = Broad.SendTransaction()
 	if err != nil {
+		log.Error("====Spike log: ", err)
 		return serializer.Response{
 			Code: 405,
 		}

@@ -1,15 +1,17 @@
 package nft
 
 import (
-	"fmt"
 	"game-blockchain-server/constants"
 	"game-blockchain-server/serializer"
 	"game-blockchain-server/service/signature"
 	tx "game-blockchain-server/service/transaction"
 	"game-blockchain-server/utils"
 	"github.com/ethereum/go-ethereum/common/hexutil"
+	logger "github.com/ipfs/go-log"
 	"os"
 )
+
+var log = logger.Logger("nft")
 
 type SetBaseTokenURI struct {
 	BaseURI        string `form:"base_uri" binding:"required"`
@@ -28,7 +30,7 @@ func (service *SetBaseTokenURI) SetBaseTokenURI() serializer.Response {
 	data = append(data, offset...)
 	data = append(data, baseURI...)
 
-	fmt.Println("methodID: ", hexutil.Encode(methodID), "baseURI: ", hexutil.Encode(baseURI), "offset: ", offset)
+	log.Info("====Spike log: ", "methodID: ", hexutil.Encode(methodID), "baseURI: ", hexutil.Encode(baseURI), "offset: ", offset)
 
 	contractAddress, err := constants.GetContractAddress(service.ContractNumber)
 
@@ -38,6 +40,7 @@ func (service *SetBaseTokenURI) SetBaseTokenURI() serializer.Response {
 	}
 	transaction, err := spikeTx.ConstructionTransaction()
 	if err != nil {
+		log.Error("====Spike log: ", err)
 		return serializer.Response{
 			Code:  402,
 			Error: err.Error(),
@@ -51,6 +54,7 @@ func (service *SetBaseTokenURI) SetBaseTokenURI() serializer.Response {
 
 	signedTx, err := SignTxService.SignSeparateTX()
 	if err != nil {
+		log.Error("====Spike log: ", err)
 		return serializer.Response{
 			Code:  403,
 			Error: err.Error(),
@@ -63,8 +67,10 @@ func (service *SetBaseTokenURI) SetBaseTokenURI() serializer.Response {
 
 	err = Broad.SendTransaction()
 	if err != nil {
+		log.Error("====Spike log: ", err)
 		return serializer.Response{
-			Code: 405,
+			Code:  405,
+			Error: err.Error(),
 		}
 	}
 

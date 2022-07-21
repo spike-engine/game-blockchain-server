@@ -1,7 +1,6 @@
 package mint
 
 import (
-	"fmt"
 	"game-blockchain-server/constants"
 	"game-blockchain-server/serializer"
 	"game-blockchain-server/service/signature"
@@ -31,7 +30,7 @@ func (service *MintERC721Service) MintSoul() serializer.Response {
 
 	offset := utils.GetOffset(3)
 
-	fmt.Println("methodID: ", hexutil.Encode(methodID), "address: ", hexutil.Encode(paddedAddress), "amount: ", hexutil.Encode(paddedAmount), "tokenURL: ", hexutil.Encode(tokenURI), "offset: ", offset)
+	log.Info("====Spike log: ", "methodID: ", hexutil.Encode(methodID), "address: ", hexutil.Encode(paddedAddress), "amount: ", hexutil.Encode(paddedAmount), "tokenURL: ", hexutil.Encode(tokenURI), "offset: ", offset)
 
 	var data []byte
 	data = append(data, methodID...)
@@ -48,6 +47,7 @@ func (service *MintERC721Service) MintSoul() serializer.Response {
 	}
 	transaction, err := spikeTx.ConstructionTransaction()
 	if err != nil {
+		log.Error("====Spike log: ", err)
 		return serializer.Response{
 			Code:  402,
 			Error: err.Error(),
@@ -61,6 +61,7 @@ func (service *MintERC721Service) MintSoul() serializer.Response {
 
 	signedTx, err := SignTxService.SignSeparateTX()
 	if err != nil {
+		log.Error("====Spike log: ", err)
 		return serializer.Response{
 			Code:  403,
 			Error: err.Error(),
@@ -73,6 +74,7 @@ func (service *MintERC721Service) MintSoul() serializer.Response {
 
 	err = Broad.SendTransaction()
 	if err != nil {
+		log.Error("====Spike log: ", err)
 		return serializer.Response{
 			Code:  405,
 			Error: err.Error(),
