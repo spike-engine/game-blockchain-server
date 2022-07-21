@@ -21,11 +21,14 @@ func (service *SetBaseTokenURI) SetBaseTokenURI() serializer.Response {
 
 	baseURI := utils.GetTxString(service.BaseURI)
 
+	offset := utils.GetOffset(1)
+
 	var data []byte
 	data = append(data, methodID...)
+	data = append(data, offset...)
 	data = append(data, baseURI...)
 
-	fmt.Println("methodID: ", hexutil.Encode(methodID), "baseURI: ", hexutil.Encode(baseURI))
+	fmt.Println("methodID: ", hexutil.Encode(methodID), "baseURI: ", hexutil.Encode(baseURI), "offset: ", offset)
 
 	contractAddress, err := constants.GetContractAddress(service.ContractNumber)
 

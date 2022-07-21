@@ -1,6 +1,8 @@
 package utils
 
 import (
+	"bytes"
+	"encoding/binary"
 	"github.com/ethereum/go-ethereum/common"
 	"golang.org/x/crypto/sha3"
 	"math/big"
@@ -24,5 +26,20 @@ func GetTxUint256(a string) []byte {
 }
 
 func GetTxString(s string) []byte {
-	return common.LeftPadBytes([]byte(s), 32)
+	stringLength := len([]byte(s))
+	var result []byte
+	result = append(result, common.LeftPadBytes(IntToBytes(stringLength), 32)...)
+	result = append(result, common.LeftPadBytes([]byte(s), 32)...)
+	return result
+}
+
+func IntToBytes(n int) []byte {
+	x := int32(n)
+	bytesBuffer := bytes.NewBuffer([]byte{})
+	binary.Write(bytesBuffer, binary.BigEndian, x)
+	return bytesBuffer.Bytes()
+}
+
+func GetOffset(offset int) []byte {
+	return common.LeftPadBytes(IntToBytes(offset*32), 32)
 }

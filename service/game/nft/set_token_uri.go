@@ -1,11 +1,13 @@
 package nft
 
 import (
+	"fmt"
 	"game-blockchain-server/constants"
 	"game-blockchain-server/serializer"
 	"game-blockchain-server/service/signature"
 	tx "game-blockchain-server/service/transaction"
 	"game-blockchain-server/utils"
+	"github.com/ethereum/go-ethereum/common/hexutil"
 	"os"
 )
 
@@ -16,14 +18,17 @@ type SetTokenURI struct {
 }
 
 func (service *SetTokenURI) SetTokenURI() serializer.Response {
-	methodID := utils.GetTxMethodName("setTokenURl(uint256,string)")
+	methodID := utils.GetTxMethodName("setTokenURI(uint256,string)")
 
 	tokenID := utils.GetTxUint256(service.TokenID)
 	tokenURI := utils.GetTxString(service.TokenURI)
+	offset := utils.GetOffset(2)
 
+	fmt.Println("tokenuri: ", service.TokenURI, "tokenID: ", hexutil.Encode(tokenID), "tokenURI: ", tokenURI)
 	var data []byte
 	data = append(data, methodID...)
 	data = append(data, tokenID...)
+	data = append(data, offset...)
 	data = append(data, tokenURI...)
 
 	contractAddress, err := constants.GetContractAddress(service.ContractNumber)
