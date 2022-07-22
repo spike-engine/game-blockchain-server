@@ -11,10 +11,10 @@ import (
 )
 
 type WithdrawalERC721Service struct {
-	FromAddress    string `form:"from_address" binding:"required"`
-	ToAddress      string `form:"to_address" binding:"required"`
-	TokenID        string `form:"token_id" binding:"required"`
-	ContractNumber int    `form:"contract_number" binding:"required"`
+	FromAddress    string `form:"from_address" json:"from_address" binding:"required"`
+	ToAddress      string `form:"to_address" json:"to_address" binding:"required"`
+	TokenID        string `form:"token_id" json:"token_id" binding:"required"`
+	ContractNumber int    `form:"contract_number" json:"contract_number" binding:"required"`
 }
 
 func (service *WithdrawalERC721Service) WithdrawalSoul() serializer.Response {

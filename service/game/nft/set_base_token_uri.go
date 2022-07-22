@@ -14,8 +14,8 @@ import (
 var log = logger.Logger("nft")
 
 type SetBaseTokenURI struct {
-	BaseURI        string `form:"base_uri" binding:"required"`
-	ContractNumber int    `form:"contract_number" binding:"required"`
+	BaseURI        string `form:"base_uri" json:"base_uri" binding:"required"`
+	ContractNumber int    `form:"contract_number" json:"contract_number" binding:"required"`
 }
 
 func (service *SetBaseTokenURI) SetBaseTokenURI() serializer.Response {

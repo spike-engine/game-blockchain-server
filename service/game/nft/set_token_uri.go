@@ -11,9 +11,9 @@ import (
 )
 
 type SetTokenURI struct {
-	TokenID        string `form:"token_id" binding:"required"`
-	TokenURI       string `form:"token_uri" binding:"required"`
-	ContractNumber int    `form:"contract_number" binding:"required"`
+	TokenID        string `form:"token_id" json:"token_id" binding:"required"`
+	TokenURI       string `form:"token_uri" json:"token_uri" binding:"required"`
+	ContractNumber int    `form:"contract_number" json:"contract_number" binding:"required"`
 }
 
 func (service *SetTokenURI) SetTokenURI() serializer.Response {

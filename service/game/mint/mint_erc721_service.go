@@ -11,12 +11,12 @@ import (
 )
 
 type MintERC721Service struct {
-	TokenID string `form:"token_id" binding:"required"`
+	TokenID string `form:"token_id" json:"token_id" binding:"required"`
 	//  toAddress is nft owner, Can be the owner or administrator of the contract
-	ToAddress string `form:"to_address" binding:"required"`
+	ToAddress string `form:"to_address" json:"to_address" binding:"required"`
 
-	TokenURI       string `form:"token_uri" binding:"required"`
-	ContractNumber int    `form:"contract_number" binding:"required"`
+	TokenURI       string `form:"token_uri" json:"token_uri" binding:"required"`
+	ContractNumber int    `form:"contract_number" json:"contract_number" binding:"required"`
 }
 
 func (service *MintERC721Service) MintSoul() serializer.Response {

@@ -14,9 +14,9 @@ import (
 var log = logger.Logger("withdrawal")
 
 type WithdrawalERC20Service struct {
-	ToAddress      string `form:"to_address" binding:"required"`
-	Amount         string `form:"amount" binding:"required"`
-	ContractNumber int    `form:"contract_number" binding:"required"`
+	ToAddress      string `form:"to_address" json:"to_address" binding:"required"`
+	Amount         string `form:"amount" json:"amount" binding:"required"`
+	ContractNumber int    `form:"contract_number" json:"contract_number" binding:"required"`
 }
 
 func (service *WithdrawalERC20Service) WithdrawalERC20() serializer.Response {
